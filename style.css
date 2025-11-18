@@ -1,0 +1,247 @@
+/* --- CSS 변수 정의 (테마) --- */
+:root {
+    --bg-primary: #f0f8ff;
+    --bg-secondary: #e0f7fa;
+    --bg-tertiary: #ffffff;
+    --text-primary: #0c2d48;
+    --text-secondary: #5f7d95;
+    --border-color: #bce6eb;
+    --accent-primary: #00acc1;
+    --accent-secondary: #80deea;
+    --accent-delete: #ff7043;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #2c3e50;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a9b4c2;
+    --border-color: #0f3460;
+    --accent-primary: #9b59b6;
+    --accent-secondary: #8e44ad;
+    --accent-delete: #e74c3c;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+/* --- 기본 스타일 --- */
+body {
+    font-family: sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- 앱 전체 레이아웃 --- */
+.app-container { display: flex; height: 100vh; }
+#memo-list-container { width: 35%; max-width: 400px; padding: 20px; background-color: var(--bg-secondary); border-right: 1px solid var(--border-color); overflow-y: auto; transition: background-color 0.3s, border-color 0.3s; display: flex; flex-direction: column; }
+#memo-editor-container { flex-grow: 1; padding: 20px; display: flex; flex-direction: column; background-color: var(--bg-tertiary); transition: background-color 0.3s; }
+.main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+h1, #memo-list-container h2 { text-align: center; color: var(--text-primary); margin: 0; }
+
+/* --- 테마 스위치 --- */
+.theme-switcher { position: relative; display: inline-block; width: 50px; height: 28px; }
+.theme-switcher input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 28px; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--accent-primary); }
+input:checked + .slider:before { transform: translateX(22px); }
+
+/* --- 목록 툴바 --- */
+.list-toolbar { margin-bottom: 15px; }
+#search-input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+.sort-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+.sort-container label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+#sort-order {
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.list-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+.list-actions > div { display: flex; align-items: center; gap: 5px; }
+#delete-selected-btn { background-color: var(--accent-delete); color: white; border: none; padding: 8px 12px; border-radius: 3px; cursor: pointer; }
+#delete-selected-btn:hover { opacity: 0.8; }
+#filter-favorites-btn, #session-lock-btn, #change-password-btn { background: none; border: 1px solid transparent; color: var(--text-secondary); font-size: 18px; cursor: pointer; padding: 5px; vertical-align: middle; }
+#filter-favorites-btn.active, #session-lock-btn.unlocked { color: var(--accent-primary); }
+
+/* --- 입력 섹션 --- */
+.memo-input { display: flex; flex-direction: column; flex-grow: 1; }
+#memo-title {
+    padding: 10px;
+    margin-bottom: 20px; /* Increased gap */
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1.2em;
+    resize: vertical;
+}
+#text-options-toolbar, #handwriting-toolbar { display: flex; flex-wrap: wrap; align-items: center; background-color: var(--bg-secondary); padding: 5px; border-radius: 5px 5px 0 0; border: 1px solid var(--border-color); border-bottom: none; }
+#text-options-toolbar button, #text-options-toolbar select, #handwriting-toolbar button { margin: 2px; padding: 5px; border: 1px solid transparent; background-color: var(--bg-tertiary); color: var(--text-primary); cursor: pointer; }
+#text-options-toolbar button:hover, #text-options-toolbar select:hover, #handwriting-toolbar button:hover { background-color: var(--border-color); }
+#text-options-toolbar input[type="color"] { border: none; padding: 0; width: 24px; height: 24px; cursor: pointer; background: none; }
+#text-options-toolbar label { font-weight: bold; margin-left: 5px; cursor: pointer; }
+.editable-area { padding: 10px; border: 1px solid var(--border-color); background-color: var(--bg-tertiary); color: var(--text-primary); flex-grow: 1; overflow-y: auto; line-height: 1.5; }
+.editable-area:empty:before { content: attr(placeholder); color: var(--text-secondary); pointer-events: none; }
+#memo-content { border-radius: 0 0 5px 5px; border-top: none; margin-bottom: 10px; }
+
+/* --- 첨부파일 목록 (에디터) --- */
+#current-attachments-list-container {
+    min-height: 50px;
+    max-height: 110px; /* Adjusted to show ~3 items before scrolling */
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px dashed var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--bg-secondary);
+    position: relative;
+}
+#current-attachments-list:empty::before {
+    content: "첨부된 파일이 여기에 표시됩니다.";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+#current-attachments-list .attachment-item-editor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    background-color: var(--bg-tertiary);
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+#current-attachments-list .attachment-item-editor span {
+    font-size: 14px;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+    flex-grow: 1;
+    word-break: break-all; /* Force long strings to wrap */
+}
+#current-attachments-list .attachment-item-editor .attachment-actions {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+#current-attachments-list .attachment-item-editor .attachment-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px; /* Adjusted for text button */
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+.attachment-download-btn {
+    color: var(--accent-primary);
+    border: 1px solid var(--accent-primary) !important;
+}
+.attachment-delete-btn {
+    color: var(--accent-delete);
+}
+
+#attachment-toolbar { padding: 8px 5px; display: flex; gap: 10px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-top: 1px solid var(--border-color); margin-bottom: 10px; border-radius: 5px; }
+.attachment-btn, #record-audio-btn, #stop-audio-btn { padding: 8px 12px; background-color: var(--accent-secondary); color: var(--text-primary); border: none; border-radius: 3px; cursor: pointer; }
+.attachment-toolbar.modal-toolbar { margin-top: 10px; border-top: 1px solid var(--border-color); } /* For modal attachment toolbar */
+#stop-audio-btn { background-color: var(--accent-delete); color: white; }
+
+#add-memo { padding: 12px; background-color: var(--accent-primary); color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 16px; }
+#add-memo:hover { opacity: 0.9; }
+
+/* --- 메모 목록 --- */
+#memo-list { overflow-y: auto; flex-grow: 1; }
+.memo-item { background-color: var(--bg-tertiary); padding: 10px; margin-bottom: 10px; border-radius: 5px; box-shadow: 0 1px 3px var(--shadow-color); display: flex; align-items: center; border-left: 5px solid transparent; transition: all 0.2s ease-in-out; }
+.memo-item.locked-preview .memo-content-preview { filter: blur(4px); pointer-events: none; }
+.memo-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px var(--shadow-color); }
+.memo-item input[type="checkbox"] { margin-right: 10px; }
+.memo-item .memo-content-preview { flex-grow: 1; cursor: pointer; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.memo-item .memo-content-preview h3 { margin: 0 0 8px 0; color: var(--text-primary); }
+.memo-item .memo-content-preview p { margin: 0; font-size: 14px; color: var(--text-secondary); }
+.memo-item .actions { display: flex; align-items: center; }
+.memo-item .actions .favorite-btn, .memo-item .actions .lock-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-secondary); padding: 5px; }
+.memo-item .actions .favorite-btn.favorited, .memo-item .actions .lock-btn.locked { color: #ffc107; }
+.memo-item .actions .delete-single { background-color: transparent; color: var(--text-secondary); border: none; font-size: 18px; padding: 5px; opacity: 0; transition: opacity 0.2s ease; }
+.memo-item:hover .actions .delete-single { opacity: 1; }
+.memo-item .actions .delete-single:hover { color: var(--accent-delete); }
+
+/* --- 툴바 및 모드 전환 --- */
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; }
+.mode-switch button { padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 3px; cursor: pointer; background-color: var(--bg-tertiary); color: var(--text-primary); }
+.mode-switch button.active { background-color: var(--accent-primary); color: white; }
+.template-selector select { padding: 8px; border-radius: 3px; background-color: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); }
+
+/* --- 모드 콘텐츠 (텍스트/필기) --- */
+.mode-content { display: none; flex-grow: 1; flex-direction: column; }
+.mode-content.active { display: flex; }
+#handwriting-mode { flex-grow: 1; }
+#memo-canvas {
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    cursor: crosshair;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- 템플릿별 스타일 --- */
+.template-basic {
+    /* No special background, just default editor background */
+    background-image: none;
+}
+.template-lined { background-image: linear-gradient(var(--border-color) 1px, transparent 1px); background-size: 100% 1.5em; line-height: 1.5em; }
+.template-grid { background-image: linear-gradient(var(--border-color) 1px, transparent 1px), linear-gradient(to right, var(--border-color) 1px, transparent 1px); background-size: 20px 20px; }
+.template-chalkboard { background-color: #2c3e50; font-family: 'Comic Sans MS', 'Chalkduster', cursive; color: #fff; border-color: #000; }
+.memo-item.template-chalkboard .memo-content-preview h3, .memo-item.template-chalkboard .memo-content-preview p { color: #fff; }
+
+/* --- 에디터 내 미디어 --- */
+.editable-area img, .editable-area audio { max-width: 90%; display: block; margin: 10px auto; border-radius: 5px; }
+
+/* 선택된 메모 아이템 스타일 */
+.memo-item.selected { border-left-color: var(--accent-primary); background-color: var(--bg-secondary); }
+
+/* --- 모달 창 스타일 --- */
+.modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); }
+.modal-content { background-color: var(--bg-tertiary); margin: 10% auto; padding: 20px; border: 1px solid var(--border-color); width: 80%; max-width: 600px; border-radius: 5px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.modal-content h2 { color: var(--text-primary); }
+.close-button { color: var(--text-secondary); position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; }
+.close-button:hover, .close-button:focus { color: var(--text-primary); text-decoration: none; cursor: pointer; }
+#modal-memo-title { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 3px; font-size: 1.2em; background-color: var(--bg-tertiary); color: var(--text-primary); }
+#modal-memo-body.editable-area { width: calc(100% - 22px); height: 200px; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 3px; background-color: var(--bg-tertiary); color: var(--text-primary); overflow-y: auto; }
+#modal-memo-body img, #modal-memo-body audio { max-width: 100%; display: block; margin-bottom: 10px; border-radius: 3px; }
+#modal-attachments-list-container { margin-top: 10px; }
+#modal-save-button { padding: 10px 20px; background-color: var(--accent-primary); color: white; border: none; border-radius: 3px; cursor: pointer; float: right; }
+#modal-save-button:hover { opacity: 0.9; }
+.no-results { text-align: center; color: var(--text-secondary); padding: 20px; }

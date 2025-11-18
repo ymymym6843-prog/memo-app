@@ -1,0 +1,153 @@
+<!-- DOCTYPE html: 이 문서가 HTML5 표준에 따라 작성되었음을 선언합니다. -->
+<!DOCTYPE html>
+<!-- <html lang="ko">: HTML 문서의 시작을 나타내며, 주 사용 언어가 한국어임을 명시합니다. -->
+<html lang="ko">
+<head>
+    <!-- <meta charset="UTF-8">: 문서의 문자 인코딩을 UTF-8로 설정합니다. 한글 등 다국어 문자가 깨지지 않도록 합니다. -->
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" ...>: 모바일 기기 등 다양한 화면 크기에서 페이지가 적절하게 보이도록 뷰포트를 설정합니다. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>: 웹 브라우저 탭에 표시될 페이지의 제목을 설정합니다. -->
+    <title>메모 앱</title>
+    <!-- <link rel="stylesheet" ...>: 외부 CSS 파일을 연결하여 HTML 문서의 스타일을 적용합니다. -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+    <!-- <div class="app-container">: 앱 전체를 감싸는 새로운 최상위 컨테이너 -->
+    <div class="app-container">
+        <!-- 왼쪽 컬럼: 메모 목록 -->
+        <div id="memo-list-container">
+            <h2>노트 목록</h2>
+            <div class="list-toolbar">
+                <input type="search" id="search-input" placeholder="노트 검색...">
+                <div class="sort-container">
+                    <label for="sort-order">정렬:</label>
+                    <select id="sort-order">
+                        <option value="latest">최신순</option>
+                        <option value="oldest">작성순</option>
+                        <option value="most-viewed">조회순</option>
+                    </select>
+                </div>
+                <div class="list-actions">
+                    <div>
+                        <input type="checkbox" id="select-all-checkbox">
+                        <label for="select-all-checkbox">전체 선택</label>
+                    </div>
+                    <div>
+                        <button id="filter-favorites-btn" title="즐겨찾기만 보기">★</button>
+                        <button id="session-lock-btn" title="세션 잠금/해제">🔒</button>
+                        <button id="change-password-btn" title="비밀번호 변경">🔑</button>
+                        <button id="delete-selected-btn">선택 삭제</button>
+                    </div>
+                </div>
+            </div>
+            <div id="memo-list"></div>
+        </div>
+
+        <!-- 오른쪽 컬럼: 메모 작성 및 도구 -->
+        <div id="memo-editor-container">
+            <div class="main-header">
+                <h1>메모 앱</h1>
+                <div class="theme-switcher">
+                    <input type="checkbox" id="theme-toggle">
+                    <label for="theme-toggle" class="slider"></label>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="mode-switch">
+                    <button id="text-mode-btn" class="active">텍스트</button>
+                    <button id="handwriting-mode-btn">필기</button>
+                </div>
+                <div class="template-selector">
+                    <label for="template">템플릿:</label>
+                    <select id="template">
+                        <option value="basic">기본</option>
+                        <option value="lined">줄노트</option>
+                        <option value="grid">모눈종이</option>
+                        <option value="chalkboard">칠판</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="memo-input">
+                <textarea id="memo-title" placeholder="메모 제목을 입력하세요" rows="2"></textarea>
+
+                <div id="text-mode" class="mode-content active">
+                    <div id="text-options-toolbar">
+                        <button data-command="undo" title="실행 취소">↩</button>
+                        <button data-command="redo" title="다시 실행">↪</button>
+                        <select data-command="fontName" title="글꼴">
+                            <option value="Arial, sans-serif">Arial</option>
+                            <option value="Verdana, sans-serif">Verdana</option>
+                            <option value="Georgia, serif">Georgia</option>
+                            <option value="'Times New Roman', serif">Times New Roman</option>
+                            <option value="'Courier New', monospace">Courier New</option>
+                            <option value="Impact, fantasy">Impact</option>
+                            <option value="'Comic Sans MS', cursive">Comic Sans MS</option>
+                            <option value="'Lucida Console', monospace">Lucida Console</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                            <option value="'Arial Black', sans-serif">Arial Black</option>
+                        </select>
+                        <select data-command="fontSize" title="글자 크기"><option value="1">매우 작게</option><option value="2">작게</option><option value="3">보통</option><option value="4">약간 크게</option><option value="5">크게</option><option value="6">매우 크게</option><option value="7">최대</option></select>
+                        <button data-command="bold" title="굵게"><b>B</b></button>
+                        <button data-command="italic" title="기울임"><i>I</i></button>
+                        <button data-command="underline" title="밑줄"><u>U</u></button>
+                        <button data-command="justifyLeft" title="왼쪽 정렬"> L</button>
+                        <button data-command="justifyCenter" title="가운데 정렬"> C</button>
+                        <button data-command="justifyRight" title="오른쪽 정렬"> R</button>
+                        <label for="foreColor" title="글자 색">A</label>
+                        <input type="color" id="foreColor" data-command="foreColor" value="#000000">
+                        <label for="hiliteColor" title="형광펜">H</label>
+                        <input type="color" id="hiliteColor" data-command="hiliteColor" value="#FFFF00">
+                    </div>
+                    <div id="memo-content" class="editable-area" contenteditable="true" placeholder="메모 내용을 입력하세요"></div>
+                </div>
+
+                <div id="handwriting-mode" class="mode-content">
+                    <div id="handwriting-toolbar">
+                        <button id="canvas-undo-btn" title="실행 취소">↩</button>
+                        <button id="canvas-redo-btn" title="다시 실행">↪</button>
+                        <button id="canvas-clear-btn" title="모두 지우기">🗑️</button>
+                    </div>
+                    <canvas id="memo-canvas"></canvas>
+                </div>
+                
+                <div id="current-attachments-list-container">
+                    <div id="current-attachments-list"></div>
+                </div>
+
+                <div id="attachment-toolbar">
+                    <label for="file-attachment-input" class="attachment-btn">📎 파일 첨부</label>
+                    <input type="file" id="file-attachment-input" accept="image/*,audio/*" hidden>
+                    <button id="record-audio-btn">🎤 음성 녹음</button>
+                    <button id="stop-audio-btn" hidden>■ 녹음 중지</button>
+                </div>
+
+                <button id="add-memo">메모 추가</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <!-- 메모 조회 및 수정을 위한 모달 창 -->
+    <div id="memo-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>메모 조회/수정</h2>
+            <input type="hidden" id="modal-memo-index">
+            <input type="text" id="modal-memo-title" placeholder="메모 제목을 입력하세요">
+            <div id="modal-memo-body" class="editable-area" contenteditable="true"></div>
+            <div id="modal-attachments-list-container">
+                <div id="modal-attachments-list"></div>
+            </div>
+            <div id="modal-attachment-toolbar" class="attachment-toolbar">
+                <label for="modal-file-attachment-input" class="attachment-btn">📎 파일 추가</label>
+                <input type="file" id="modal-file-attachment-input" accept="image/*,audio/*" hidden>
+            </div>
+            <button id="modal-save-button">저장</button>
+        </div>
+    </div>
+</body>
+</html>
